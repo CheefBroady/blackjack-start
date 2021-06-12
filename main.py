@@ -63,12 +63,21 @@ import random
 from art import logo
 from replit import clear
 
+user_cards = []
+computer_cards = []
+
 cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 
 def deal_card():
   return random.randint(0, len(cards)-1)
 
+def add_card(player [], card):
+  added_value = cards[card]
+  player.append(added_value)
+  print(f"{added_value} was added")
 
-print(f"Zufallszahl {deal_card()}, print länge {len(cards)}")
+add_card()
+
+
 
 
