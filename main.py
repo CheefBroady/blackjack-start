@@ -68,15 +68,21 @@ computer_cards = []
 
 cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 
+print(logo)
+
 def deal_card():
-  return random.randint(0, len(cards)-1)
+  rand_idx = random.randint(0, len(cards)-1)
+  print(rand_idx)
+  return cards[rand_idx]
 
-def add_card(player [], card):
-  added_value = cards[card]
-  player.append(added_value)
-  print(f"{added_value} was added")
+def add_card(player, card):
+  player.append(card)
+  print(f"{card} was added")
 
-add_card()
+add_card(user_cards, deal_card())
+
+for value in user_cards:
+  print(value)
 
 
 
