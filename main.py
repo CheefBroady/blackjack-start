@@ -65,6 +65,8 @@ from replit import clear
 
 user_cards = []
 computer_cards = []
+repeats = 2
+play_again = True
 
 cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 
@@ -75,14 +77,70 @@ def deal_card():
   print(rand_idx)
   return cards[rand_idx]
 
-def add_card(player, card):
-  player.append(card)
-  print(f"{card} was added")
+def add_card(player_list, card):
+  player_list.append(card)
+  # print(f"{card} was added")
 
-add_card(user_cards, deal_card())
+def sum_cards(player_list):
+  cards_sum = 0
+  for value in player_list:
+    cards_sum += value
+  return cards_sum
 
-for value in user_cards:
-  print(value)
+def replace_as(players_list):
+  temp_user_cards = []
+  for value in players_list:
+    if value != 11:
+      temp_user_cards.append(value)
+    else:
+      temp_user_cards.append(1)
+  return temp_user_cards
+
+def return_str_value(players_list):
+  new_value = ""
+  for value in players_list:
+    new_value += str(value)
+    new_value += ", "
+  return new_value[:-2]
+
+
+
+
+play_game = input("Do you want play a game of Blackjack? Type 'y' or 'n': ")
+
+if play_game == 'Y' or play_game == 'y':
+  for nr in range(repeats):
+    add_card(user_cards, deal_card())
+  users_actual_value = sum_cards(user_cards)
+  print(f"Your cards: [{user_cards[0]}, {user_cards[1]}], current score: {users_actual_value}")
+  add_card(computer_cards, deal_card())
+  print(f"Computer's first card: {computer_cards[0]}")
+  if users_actual_value == 21:
+    print("You won!!!!")
+  else:
+    while play_again:
+      play_again = input("Type 'y' to get another card, type 'n' to pass: ")
+      if play_again == 'y' or play_again == 'Y':
+        add_card(user_cards, deal_card())
+        users_actual_value = sum_cards(user_cards)
+        print(f"Your cards: [{return_str_value(user_cards)}], current score: {users_actual_value}")
+        add_card(computer_cards, deal_card())
+        computers_actual_value = sum_cards(computer_cards)
+        print(f"Computer's cards: [{return_str_value(computer_cards)}], current score: {computers_actual_value}")
+        if computers_actual_value == 21:
+          print("You lose!!!")
+          play_again = False
+        elif users_actual_value > 21:
+          if sum_cards(replace_as(user_cards)) > 21:
+            print("You lose!!!")
+            play_again = False
+      else:
+        play_again = False
+
+
+print("Good Bye")
+
+print(return_str_value(user_cards))
 
 
 
