@@ -63,40 +63,36 @@ import random
 from art import logo
 from replit import clear
 
-user_cards = []
-computer_cards = []
-repeats = 2
-play_again = True
 
-cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+
+
+
 
 
 # deal_card() function uses any Input-List to *return* a random card.
+"""Returns a random card from the deck."""
 def deal_card():
-  rand_idx = random.randint(0, len(cards)-1)
-  print(rand_idx)
-  return cards[rand_idx]
+  cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+  card = random.choice(cards)
+  return card
 
 
-# Deal the user and computer 2 cards each using deal_card() and append()
-def add_card(player_list, card):
-  player_list.append(card)
+
+
 
 
 # calculate_score() takes a List of cards as input 
 # and returns the score
+"""Take a list of cards and return the score calculated from the cards-list."""
 def calculate_score(player_list):
   sum_value = sum(player_list)
   if len(player_list) == 2 and sum_value == 21:
     return 0
-  elif sum_value > 21:
-    for value in player_list:
-      if value == 11:
-        player_list.remove(value)
-        player_list.append(1)
-    return sum(player_list) 
-  else:
-    return sum(player_list)
+  if sum_value > 21 and 11 in player_list:
+    player_list.remove(11)
+    player_list.append(1)
+  return sum_value 
+
 
 
 # def replace_as(players_list):
@@ -108,12 +104,7 @@ def calculate_score(player_list):
 #       temp_user_cards.append(1)
 #   return temp_user_cards
 
-def return_str_value(players_list):
-  new_value = ""
-  for value in players_list:
-    new_value += str(value)
-    new_value += ", "
-  return new_value[:-2]
+
 
 
 # compare() and pass in the user_score and computer_score. If the computer # and user both have the same score, then it's a draw. If the computer has # a blackjack (0), then the user loses. If the user has a blackjack (0),
@@ -121,56 +112,60 @@ def return_str_value(players_list):
 # the computer_score is over 21, then the computer loses. If none of the
 # above, then the player with the highest score wins.
 def compare(user_score, computer_score):
-  if user_score == computer_score:
-    print("It is a draw!") # unentschieden
+  if user_score > 21 and computer_score > 21:
+    return "You went over. You lose 😤"
+  elif user_score == computer_score:
+    return "Draw 🙃" # unentschieden
   elif computer_score == 0:
-    print("You lose!")
+    return "Lose, opponent has Balckjack 😱"
   elif user_score == 0:
-    print("You lose!")
+    return "Win with a Balckjack 😎"
   elif user_score > 21:
-    print("You lose!")
+    return "You went over. You lose 😭"
   elif computer_score > 21:
-    print("You win!")
+    return "Opponent went over. You win 😁"
   elif computer_score > user_score:
-    print("You win!")
+    return "You win 😃"
   else:
-    print("You lose!")
+    return "You lose 😤"
 
 
-
-
-
-play_game = input("Do you want play a game of Blackjack? Type 'y' or 'n': ")
-
-if play_game == 'Y' or play_game == 'y':
+def play_game():
   print(logo)
-  for nr in range(repeats):
-    add_card(user_cards, deal_card())
-  users_actual_value = calculate_score(user_cards)
-  print(f"Your cards: [{return_str_value(user_cards)}], current score: {users_actual_value}")
-  add_card(computer_cards, deal_card())
-  computers_actual_value = calculate_score(computer_cards)
-  print(f"Computer's first card: {computers_actual_value}")
-  compare(calculate_score(user_cards), calculate_score(computer_cards))
-  while play_again:
-    play_again = input("Type 'y' to get another card, type 'n' to pass: ")
-    if play_again == 'y' or play_again == 'Y':
-      add_card(user_cards, deal_card())
-      users_actual_value = calculate_score(user_cards)
-      print(f"Your cards: [{return_str_value(user_cards)}], current score: {users_actual_value}")
+# play_game = input("Do you want play a game of Blackjack? Type 'y' or 'n': ")
+  user_cards = []
+  computer_cards = []
+  is_game_over = False
+
+# Deal the user and computer 2 cards each using deal_card() and append()
+  for _ in range(2):
+    user_cards.append(deal_card())
+    computer_cards.append(deal_card())
+
+  while not is_game_over:
+    user_score = calculate_score(user_cards)
+    computer_score = calculate_score(computer_cards)
+    print(f" Your cards: {user_cards}, current score: {user_score}")
+    print(f" Computer's cards: {computer_cards[0]}")
+
+    if user_score == 0 or computer_score == 0 or user_score > 21:
+      is_game_over = True
     else:
-      play_again = False
-  add_card(computer_cards, deal_card())
-  computers_actual_value = calculate_score(computer_cards)
-  print(f"Computer's cards: [{return_str_value(computer_cards)}], current score: {computers_actual_value}")
-  
-      
+      user_should_deal = input("Type 'y' to get another card, type 'n' to pass: ")
+      if user_should_deal == "y" or user_should_deal == "Y":
+        user_cards.append(deal_card())
+      else:
+        is_game_over = True
 
 
-print("Good Bye")
+  while computer_score != 0 and computer_score < 17:
+    computer_cards.append(deal_card())
+    computer_score = calculate_score(computer_cards)
 
+  print(f" Your final hand: {user_cards}, final score: {user_score}")
+  print(f" Computer's final hand: {computer_cards}, final score: {computer_score}")
+  print(compare(user_cards, computer_score))
 
-
-
-
-
+  while input("Do you want to play a game of Blackjack? Type 'y' or 'n': ") == "y":
+    clear()
+    play_game()
