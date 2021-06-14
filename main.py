@@ -85,13 +85,13 @@ def deal_card():
 # and returns the score
 """Take a list of cards and return the score calculated from the cards-list."""
 def calculate_score(player_list):
-  sum_value = sum(player_list)
-  if len(player_list) == 2 and sum_value == 21:
+  sum_list = sum(player_list)
+  if sum_list == 21 and len(player_list) == 2:
     return 0
-  if sum_value > 21 and 11 in player_list:
+  if 11 in player_list and sum_list > 21:
     player_list.remove(11)
     player_list.append(1)
-  return sum_value 
+  return sum(player_list) 
 
 
 
@@ -165,6 +165,6 @@ def play_game():
   print(f" Computer's final hand: {computer_cards}, final score: {computer_score}")
   print(compare(user_cards, computer_score))
 
-  while input("Do you want to play a game of Blackjack? Type 'y' or 'n': ") == "y":
-    clear()
-    play_game()
+while input("Do you want to play a game of Blackjack? Type 'y' or 'n': ") == "y":
+  clear()
+  play_game()
